@@ -1,6 +1,8 @@
 // #include "hello_world_c/hello_world_c.h"//內部的c func
 #include "hello_world_c.h"
+
 #include "php_foo.h"
+#include "ext/standard/info.h"
 
 #if COMPILE_DL_FOO
 ZEND_GET_MODULE(foo)
@@ -144,7 +146,7 @@ PHP_FUNCTION(foo_hello_add) {
   RETURN_DOUBLE(sum);
 }
 
-PHP_FUNCTION(emeldsp_hello_void) {
+PHP_FUNCTION(foo_hello_void) {
   php_printf("call hello_world_c_void");
   hello_world_c_void(); 
   RETURN_TRUE;
