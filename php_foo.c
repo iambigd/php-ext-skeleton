@@ -1,7 +1,8 @@
 // #include "hello_world_c/hello_world_c.h"//內部的c func
-#include "hello_world_c.h"
 
 #include "php_foo.h"
+#include "hello_world_c.h"
+
 #include "ext/standard/info.h"
 
 #if COMPILE_DL_FOO
@@ -147,7 +148,7 @@ PHP_FUNCTION(foo_hello_add) {
 }
 
 PHP_FUNCTION(foo_hello_void) {
-  php_printf("call hello_world_c_void");
-  hello_world_c_void(); 
+  php_printf("call hello_world_c_noreturn");
+  hello_world_c_noreturn(); 
   RETURN_TRUE;
 }

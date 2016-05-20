@@ -16,8 +16,8 @@ int hello_world_c_add(int a,int b){
 	return sum;
 }
 
-void hello_world_c_void(){
-  printf("hello_world_c_void [NO RETURN]\n");
+void hello_world_c_noreturn(){
+  printf("hello_world_c_noreturn [NO RETURN]\n");
 }
 
 int main(){
