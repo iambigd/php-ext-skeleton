@@ -1,4 +1,5 @@
-#include "hello_world_c/hello_world_c.h"//內部的c func
+// #include "hello_world_c/hello_world_c.h"//內部的c func
+#include "hello_world_c.h"
 #include "php_foo.h"
 
 #if COMPILE_DL_FOO
@@ -11,8 +12,7 @@ static const zend_function_entry foo_functions[] = {
   PHP_FE(foo_hello_str, NULL)
   PHP_FE(foo_hello_arr, NULL)
   PHP_FE(foo_hello_add, NULL)
-
-  
+  PHP_FE(foo_hello_void, NULL)
   PHP_FE_END
 };
 
@@ -144,3 +144,8 @@ PHP_FUNCTION(foo_hello_add) {
   RETURN_DOUBLE(sum);
 }
 
+PHP_FUNCTION(emeldsp_hello_void) {
+  php_printf("call hello_world_c_void");
+  hello_world_c_void(); 
+  RETURN_TRUE;
+}

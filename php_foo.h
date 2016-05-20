@@ -3,6 +3,7 @@
   #ifdef HAVE_CONFIG_H
   #include "config.h"
 #endif
+
 #ifdef ZTS
   #include <TSRM.h>
 #endif
@@ -19,5 +20,6 @@ PHP_FUNCTION(foo_hello);
 PHP_FUNCTION(foo_hello_str);
 PHP_FUNCTION(foo_hello_arr);
 PHP_FUNCTION(foo_hello_add);
+PHP_FUNCTION(foo_hello_void);
 
 #endif
