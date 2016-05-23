@@ -7,7 +7,7 @@
 
 int hello_world_c_add(int a,int b){
 	int sum = 0;
-	printf("hello_world_c_add is coming Orz\n");
+	printf("[hello_world_c_add] is running \n");
 	printf("%d\n", a);
 	printf("%d\n", b);
 	sum = a+b;
@@ -17,7 +17,7 @@ int hello_world_c_add(int a,int b){
 }
 
 void hello_world_c_noreturn(){
-  printf("hello_world_c_noreturn [NO RETURN]\n");
+  printf("[hello_world_c_noreturn] is running\n");
 }
 
 int main(){

@@ -3,7 +3,7 @@
 #include "php_foo.h"
 #include "hello_world_c.h"
 
-#include "ext/standard/info.h"
+// #include "ext/standard/info.h"
 
 #if COMPILE_DL_FOO
 ZEND_GET_MODULE(foo)

@@ -1,1 +1,9 @@
-php -r "echo foo_hello();";
+php -r "echo foo_hello();"
+
+php -r "echo foo_hello_str('bigd');"
+
+php -r "echo foo_hello_arr(Array('I','am','bigd'));"
+
+php -r "foo_hello_add(5,5);";
+
+php -r "foo_hello_void();";

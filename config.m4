@@ -4,11 +4,9 @@ PHP_ARG_ENABLE(foo, whether to enable foo extension support,
   [--enable-foo Enable foo extension support])
 
 
-PHP_INTERNAL_LIB=/webdata/emel_ext/php-ext-skeleton
-
 if test $PHP_FOO != "no"; then
- 	PHP_NEW_EXTENSION(foo, php_foo.c, $ext_shared)
+ 	dnl PHP_NEW_EXTENSION(foo, php_foo.c, $ext_shared)
 
- 	dnl PHP_NEW_EXTENSION(foo, php_foo.c hello_world_c.c, $ext_shared)
+  	PHP_NEW_EXTENSION(foo, php_foo.c hello_world_c.c, $ext_shared)
  	
 fi

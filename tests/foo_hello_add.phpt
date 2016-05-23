@@ -8,7 +8,7 @@ foo_hello_add(5,5);
 run foo_hello_add
 val1=5
 val2=5
-hello_world_c_add is coming Orz
+[hello_world_c_add] is running 
 5
 5
 sum=10
