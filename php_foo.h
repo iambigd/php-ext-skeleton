@@ -73,5 +73,6 @@ PHP_FUNCTION(foo_set_global_counter);
 PHP_FUNCTION(foo_get_global_counter);
 PHP_FUNCTION(foo_set_global_string);
 PHP_FUNCTION(foo_get_global_string);
+PHP_FUNCTION(foo_get_global_unsafe_counter);
 
 #endif

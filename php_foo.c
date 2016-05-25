@@ -11,6 +11,8 @@
 ZEND_GET_MODULE(foo)
 #endif
 
+/* True global resources - no need for thread safety here */
+static int global_counter = 0;
 
 /*
 全域變數
@@ -45,6 +47,8 @@ static const zend_function_entry foo_functions[] = {
   PHP_FE(foo_set_global_counter, NULL)
   PHP_FE(foo_get_global_string, NULL)
   PHP_FE(foo_set_global_string, NULL)
+  PHP_FE(foo_get_global_unsafe_counter, NULL)
+
   
   PHP_FE_END
 };
@@ -75,6 +79,8 @@ PHP_MINIT_FUNCTION(foo) {
 
   ZEND_INIT_MODULE_GLOBALS(
     foo,foo_globals_ctor, NULL);
+
+  global_counter++;
 
   return SUCCESS;
 }
@@ -287,5 +293,10 @@ PHP_FUNCTION(foo_get_global_string) {
 
       RETURN_EMPTY_STRING();
    }
+}
+
+PHP_FUNCTION(foo_get_global_unsafe_counter) { 
+    php_printf("call foo_get_global_unsafe_counter");
+    RETURN_LONG(global_counter);
 }
 
