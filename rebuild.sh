@@ -9,3 +9,5 @@ phpize
 make 
 make test
 sudo make install
+
+sudo /etc/init.d/httpd restart

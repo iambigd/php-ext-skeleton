@@ -7,3 +7,12 @@ php -r "echo foo_hello_arr(Array('I','am','bigd'));"
 php -r "foo_hello_add(5,5);";
 
 php -r "foo_hello_void();";
+
+
+php -r "echo foo_get_global_counter();";
+
+php -r "echo foo_set_global_counter();";
+
+php -r "echo foo_get_global_string();";
+
+php -r "echo foo_set_global_string('myGLOBAL');";

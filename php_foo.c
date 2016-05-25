@@ -2,20 +2,50 @@
 
 #include "php_foo.h"
 #include "hello_world_c.h"
+#include "stack_lv1.h"
+
 
 // #include "ext/standard/info.h"
 
-#if COMPILE_DL_FOO
+#if COMPILE_DL_FOO 
 ZEND_GET_MODULE(foo)
 #endif
 
+
+/*
+全域變數
+*/
+ZEND_DECLARE_MODULE_GLOBALS(foo)
+static void foo_globals_ctor(zend_foo_globals *globals) {
+
+  /* Initialize your global struct */
+  globals->str = NULL; 
+  globals->strlen = 0;
+  globals->counter = 0;
+};
+
+static void foo_globals_dtor(zend_foo_globals *globals) {
+  /* Clean up any allocated globals */
+
+};
+
+
 static const zend_function_entry foo_functions[] = {
+  
   //定義你這個外掛可以用的php function，用了此宣告要多實作PHP_FUNCTION(如果有多個函式的話請多加即可)
+  
   PHP_FE(foo_hello, NULL)
   PHP_FE(foo_hello_str, NULL)
   PHP_FE(foo_hello_arr, NULL)
   PHP_FE(foo_hello_add, NULL)
   PHP_FE(foo_hello_void, NULL)
+
+  //global variable testing
+  PHP_FE(foo_get_global_counter, NULL)
+  PHP_FE(foo_set_global_counter, NULL)
+  PHP_FE(foo_get_global_string, NULL)
+  PHP_FE(foo_set_global_string, NULL)
+  
   PHP_FE_END
 };
 
@@ -23,10 +53,10 @@ zend_module_entry foo_module_entry = {
   STANDARD_MODULE_HEADER,
   "Foo",                       // your extension name
   foo_functions,               // where you define your functions
-  NULL, // PHP_MINIT(foo),     // for module initialization
-  NULL, // PHP_MSHUTDOWN(foo), // for module shutdown process
-  NULL, // PHP_RINIT(foo)      // for request initialization
-  NULL, // PHP_RSHUTDOWN(foo)  // for reqeust shutdown process
+  PHP_MINIT(foo),     // for module initialization
+  PHP_MSHUTDOWN(foo), // for module shutdown process
+  PHP_RINIT(foo),     // for request initialization
+  PHP_RSHUTDOWN(foo),  // for reqeust shutdown process
   PHP_MINFO(foo),              // for providing module information
   "0.1",
   STANDARD_MODULE_PROPERTIES
@@ -37,13 +67,44 @@ Remove the comment if you want to initiazlie something (class entry, resource en
 */
 
 // 每一次執行php時，會先載入 extension，這時須要執行的程式寫在這裡。
+//MINIT與MSHUTDOWN只能回傳SUCCESS，不然會中斷php執行
 PHP_MINIT_FUNCTION(foo) {
+
+  // ZEND_INIT_MODULE_GLOBALS(
+    // foo,foo_globals_ctor, foo_globals_dtor);
+
+  ZEND_INIT_MODULE_GLOBALS(
+    foo,foo_globals_ctor, NULL);
+
   return SUCCESS;
 }
+
 // PHP執行結束時，會執行的程式。
 PHP_MSHUTDOWN_FUNCTION(foo) {
+  #ifndef ZTS
+  foo_globals_dtor(&foo_globals TSRMLS_CC);
+  #endif
+
   return SUCCESS;
 }
+
+PHP_RINIT_FUNCTION(foo){
+/* Track number of times this thread/process
+* has serviced requests */ 
+  
+  // FOO_G(counter)++;
+
+  return SUCCESS;
+}
+
+PHP_RSHUTDOWN_FUNCTION(foo){
+  // if (FOO_G(str)) {
+  //   efree(FOO_G(str));    
+  //   FOO_G(str) = NULL; 
+  // }
+  return SUCCESS;
+}
+
 
 //extension說明資料，會出現在 phpinfo
 PHP_MINFO_FUNCTION(foo) {
@@ -56,11 +117,14 @@ PHP_MINFO_FUNCTION(foo) {
     php_info_print_table_end();
 }
 
+
 // Your functions here...
 PHP_FUNCTION(foo_hello) {
-  
+  php_printf("%s","call foo_hello");
+  s_lv1();
   // RETURN_TRUE;
   RETURN_STRING("Hello World", 1);
+
 }
 
 //輸入字串
@@ -150,5 +214,78 @@ PHP_FUNCTION(foo_hello_add) {
 PHP_FUNCTION(foo_hello_void) {
   php_printf("call hello_world_c_noreturn");
   hello_world_c_noreturn(); 
+
   RETURN_TRUE;
 }
+
+PHP_FUNCTION(foo_get_global_counter) {
+  
+
+  php_printf("call foo_get_global_counter=%d\n",FOO_G(counter));
+  
+  if (FOO_G(counter)) {
+     php_printf("find counter=%d\n",FOO_G(counter));
+ 
+  }
+
+  RETURN_LONG(FOO_G(counter));
+}
+PHP_FUNCTION(foo_set_global_counter) {
+
+ 
+  php_printf("call foo_set_global_counter\n");
+  
+   //counter ++
+  if (FOO_G(counter)) {
+     php_printf("find counter=%d\n",FOO_G(counter));
+ 
+  }
+
+   FOO_G(counter)++;
+
+  // basic_foo_value++;
+  php_printf("counter=%d\n",FOO_G(counter));
+
+  RETURN_LONG(FOO_G(counter));
+}
+
+PHP_FUNCTION(foo_set_global_string) { 
+
+  php_printf("call foo_set_global_string\n");
+
+  char *str;
+  int str_len;
+  if (zend_parse_parameters(ZEND_NUM_ARGS(), "s",
+                              &str, &str_len) == FAILURE) {
+    return; 
+  }
+
+  if (FOO_G(str)) {
+    php_printf("release str\n");
+    efree(FOO_G(str));
+  }
+  
+  //update global
+
+  FOO_G(str) = 
+    estrndup(str, str_len); 
+  FOO_G(strlen) = str_len; 
+
+  php_printf("str=%s\n",str);
+
+  RETURN_TRUE;
+}
+
+
+PHP_FUNCTION(foo_get_global_string) { 
+    php_printf("call foo_get_global_string");
+
+    if (FOO_G(str)) {
+      RETURN_STRINGL(FOO_G(str), FOO_G(strlen), 1); }
+    else {
+       php_printf("str is empty");
+
+      RETURN_EMPTY_STRING();
+   }
+}
+

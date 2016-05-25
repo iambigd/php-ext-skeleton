@@ -1,0 +1,15 @@
+dnl 把自定義的C語言func分類到不同的資料夾
+ 	PHP_SETUP_ICU(FOO_SHARED_LIBADD)
+  	PHP_SUBST(FOO_SHARED_LIBADD)
+  	PHP_REQUIRE_CXX()
+
+
+ 		PHP_NEW_EXTENSION(
+ 		foo, php_foo.c \ hello_world_c/hello_world_c.c \ stack/stack_lv1.c
+ 		, $ext_shared,,$ICU_INCS -Wno-write-strings)
+
+ 	dnl 一定要放在PHP_NEW_EXTENSION後面
+ 	PHP_ADD_BUILD_DIR($ext_builddir/hello_world_c)
+  	PHP_ADD_BUILD_DIR($ext_builddir/stack)
+
+  	 PHP_SUBST(FOO_SHARED_LIBADD)

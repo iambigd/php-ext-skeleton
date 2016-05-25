@@ -5,4 +5,4 @@ Check foo_hello_void
 echo foo_hello_void(); 
 ?>
 --EXPECT--
-call hello_world_c_noreturn1[hello_world_c_noreturn] is running
+call hello_world_c_noreturn1[hello_world_c_noreturn] is running in php-ext-skeleton
