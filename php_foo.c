@@ -94,11 +94,8 @@ PHP_MSHUTDOWN_FUNCTION(foo) {
   return SUCCESS;
 }
 
-PHP_RINIT_FUNCTION(foo){
-/* Track number of times this thread/process
-* has serviced requests */ 
-  
-  // FOO_G(counter)++;
+/*request 初始與結束*/
+PHP_RINIT_FUNCTION(foo){ 
 
   return SUCCESS;
 }
@@ -126,7 +123,7 @@ PHP_MINFO_FUNCTION(foo) {
 
 // Your functions here...
 PHP_FUNCTION(foo_hello) {
-  php_printf("%s","call foo_hello");
+  php_printf("%s","call foo_hello\n");
   s_lv1();
   // RETURN_TRUE;
   RETURN_STRING("Hello World", 1);
@@ -135,7 +132,7 @@ PHP_FUNCTION(foo_hello) {
 
 //輸入字串
 PHP_FUNCTION(foo_hello_str) {
-
+   php_printf("%s","call foo_hello_str\n");
   char *name;
   int name_len;
 
@@ -187,7 +184,7 @@ PHP_FUNCTION(foo_hello_arr) {
         zval_copy_ctor(&temp);
         convert_to_string(&temp);
         PHPWRITE(Z_STRVAL(temp), Z_STRLEN(temp));
-        php_printf(" ");
+        php_printf(" \n");
         zval_dtor(&temp);
     }
 
@@ -218,7 +215,7 @@ PHP_FUNCTION(foo_hello_add) {
 }
 
 PHP_FUNCTION(foo_hello_void) {
-  php_printf("call hello_world_c_noreturn");
+  php_printf("call hello_world_c_noreturn\n");
   hello_world_c_noreturn(); 
 
   RETURN_TRUE;
@@ -267,7 +264,7 @@ PHP_FUNCTION(foo_set_global_string) {
   }
 
   if (FOO_G(str)) {
-    php_printf("release str\n");
+    php_printf("release str=%s\n",estrndup(FOO_G(str) , FOO_G(strlen) ));
     efree(FOO_G(str));
   }
   
@@ -277,26 +274,30 @@ PHP_FUNCTION(foo_set_global_string) {
     estrndup(str, str_len); 
   FOO_G(strlen) = str_len; 
 
-  php_printf("str=%s\n",str);
+  php_printf("set str=%s\n",str);
 
   RETURN_TRUE;
 }
 
 
 PHP_FUNCTION(foo_get_global_string) { 
-    php_printf("call foo_get_global_string");
-
+    php_printf("call foo_get_global_string\n");
+    
     if (FOO_G(str)) {
-      RETURN_STRINGL(FOO_G(str), FOO_G(strlen), 1); }
+      php_printf("str is exist = %s\n", 
+          estrndup(FOO_G(str) , FOO_G(strlen) ) );
+
+      RETURN_STRINGL(FOO_G(str), FOO_G(strlen), 1);
+    }
     else {
-       php_printf("str is empty");
+       php_printf("str is empty\n");
 
       RETURN_EMPTY_STRING();
    }
 }
 
 PHP_FUNCTION(foo_get_global_unsafe_counter) { 
-    php_printf("call foo_get_global_unsafe_counter");
+    php_printf("call foo_get_global_unsafe_counter\n");
     RETURN_LONG(global_counter);
 }
 

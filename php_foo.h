@@ -32,19 +32,19 @@ Zend Thread Safety(ZTS)
 */
 
 
-#ifdef ZTS
-# define FOO_G(v) TSRMG(foo_globals_id, zend_foo_globals*, v)
-extern int foo_globals_id;
-#else
-# define FOO_G(v) (foo_globals.v)
-extern zend_foo_globals foo_globals;
-#endif 
-
 // #ifdef ZTS
-// #define FOO_G(v) TSRMG(foo_globals_id, zend_foo_globals *, v)
+// # define FOO_G(v) TSRMG(foo_globals_id, zend_foo_globals*, v)
+// extern int foo_globals_id;
 // #else
-// #define FOO_G(v) (foo_globals.v)
-// #endif
+// # define FOO_G(v) (foo_globals.v)
+// extern zend_foo_globals foo_globals;
+// #endif 
+
+#ifdef ZTS
+#define FOO_G(v) TSRMG(foo_globals_id, zend_foo_globals *, v)
+#else
+#define FOO_G(v) (foo_globals.v)
+#endif
 
 
 /*
